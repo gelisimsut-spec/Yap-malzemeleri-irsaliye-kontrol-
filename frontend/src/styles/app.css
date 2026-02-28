@@ -1,0 +1,21 @@
+:root { font-family: Inter, system-ui, sans-serif; color: #1f2937; background: #f7f7f8; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.container { max-width: 980px; margin: 0 auto; padding: 12px; }
+.card { background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+.grid { display: grid; gap: 8px; }
+.grid.two { grid-template-columns: 1fr 1fr; }
+label { font-size: 12px; font-weight: 600; }
+input, select, button, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #d1d5db; font-size: 16px; }
+button { font-weight: 700; background: #2563eb; color: #fff; border: none; }
+button.secondary { background: #f3f4f6; color: #111827; }
+.pills { display: flex; gap: 8px; overflow: auto; margin-bottom: 12px; }
+.pill { padding: 10px 12px; border-radius: 999px; border: 1px solid #d1d5db; background: #fff; white-space: nowrap; }
+.pill.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+.badge { padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.badge.unmatched { background: #fee2e2; color: #991b1b; }
+.badge.needs_review { background: #ffedd5; color: #9a3412; }
+.badge.matched { background: #dcfce7; color: #166534; }
+.stat { font-size: 24px; font-weight: 800; }
+.item { border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px; margin-bottom: 8px; }
+@media (max-width: 700px) { .grid.two { grid-template-columns: 1fr; } .container { padding: 8px; } button { min-height: 46px; } }

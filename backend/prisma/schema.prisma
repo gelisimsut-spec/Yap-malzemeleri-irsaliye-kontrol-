@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DocStatus {
+  unmatched
+  matched
+  needs_review
+}
+
+enum DocType {
+  carrier
+  supplier
+}
+
+enum OutboxStatus {
+  queued
+  sent
+  failed
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id                         Int      @id @default(1)
+  notifyPhones               String[] @default([])
+  carrierThresholdMinutes    Int      @default(90)
+  supplierThresholdMinutes   Int      @default(90)
+  amountToleranceAbsolute    Float    @default(0.5)
+  amountTolerancePercent     Float    @default(2)
+  reminderCooldownHours      Int      @default(6)
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+}
+
+model Location {
+  id         Int      @id @default(autoincrement())
+  name       String
+  address    String
+  type       String
+  createdAt  DateTime @default(now())
+  deletedAt  DateTime?
+  carrierDoc CarrierDoc[]
+  supplierDoc SupplierDoc[]
+
+  @@index([name])
+}
+
+model Vehicle {
+  id        Int      @id @default(autoincrement())
+  plate     String   @unique
+  driver    String?
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+
+  @@index([plate])
+}
+
+model CarrierDoc {
+  id              Int       @id @default(autoincrement())
+  docDate         DateTime
+  locationId      Int
+  amountValue     Float
+  amountUnit      String
+  plate           String?
+  driver          String?
+  serialNo        String?
+  status          DocStatus @default(unmatched)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+  notifiedAt      DateTime?
+  location        Location  @relation(fields: [locationId], references: [id])
+  attachments     Attachment[]
+
+  @@index([serialNo])
+  @@index([docDate])
+  @@index([status])
+  @@index([locationId])
+  @@index([plate])
+}
+
+model SupplierDoc {
+  id              Int       @id @default(autoincrement())
+  docDate         DateTime
+  locationId      Int
+  amountValue     Float
+  amountUnit      String
+  serialNo        String?
+  status          DocStatus @default(unmatched)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+  notifiedAt      DateTime?
+  location        Location  @relation(fields: [locationId], references: [id])
+  attachments     Attachment[]
+
+  @@index([serialNo])
+  @@index([docDate])
+  @@index([status])
+  @@index([locationId])
+}
+
+model Match {
+  id             Int      @id @default(autoincrement())
+  carrierDocId   Int      @unique
+  supplierDocId  Int      @unique
+  status         DocStatus
+  confidenceScore Float
+  notes          String?
+  createdAt      DateTime @default(now())
+
+  @@index([status])
+}
+
+model Attachment {
+  id         Int      @id @default(autoincrement())
+  docType    DocType
+  docId      Int
+  filePath   String
+  mime       String
+  createdAt  DateTime @default(now())
+
+  @@index([docType, docId])
+}
+
+model WhatsappSession {
+  id         Int      @id @default(autoincrement())
+  sessionKey String   @unique
+  status     String
+  qrData     String?
+  updatedAt  DateTime @updatedAt
+}
+
+model WhatsappOutbox {
+  id          Int         @id @default(autoincrement())
+  recipient   String
+  message     String
+  fileUrl     String?
+  status      OutboxStatus @default(queued)
+  retryCount  Int         @default(0)
+  lastError   String?
+  createdAt   DateTime    @default(now())
+  sentAt      DateTime?
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  actor      String
+  action     String
+  entityType String
+  entityId   String
+  payload    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+}

@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: irsaliye
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    depends_on:
+      - postgres
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/irsaliye
+      WHATSAPP_API_BASE_URL: http://whatsapp-api:8080
+      WHATSAPP_API_KEY: dev-key
+      UPLOAD_DIR: uploads
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE: http://localhost:3000/api
+    ports:
+      - "5173:5173"
+
+volumes:
+  pgdata:
