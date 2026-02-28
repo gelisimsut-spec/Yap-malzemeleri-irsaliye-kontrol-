@@ -1,0 +1,41 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #1d2939;
+  background: #f2f4f7;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 980px; margin: auto; padding: 1rem; }
+header { margin-bottom: 0.5rem; }
+nav { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; }
+.tab { border: 0; border-radius: 999px; padding: 0.7rem 1rem; background: #e4e7ec; font-weight: 600; }
+.tab.active { background: #101828; color: #fff; }
+.card { background: #fff; border-radius: 16px; padding: 1rem; margin-top: 0.5rem; box-shadow: 0 1px 2px rgba(16, 24, 40, 0.08); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin-top: 0.5rem; }
+.stats article { background: #fff; border-radius: 16px; padding: 1rem; }
+.stats .red { border-left: 6px solid #d92d20; }
+.stats .orange { border-left: 6px solid #f79009; }
+.stats .green { border-left: 6px solid #12b76a; }
+.form-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+.mobile-form input, .mobile-form select, .mobile-form button, .card input, .card select, .card button {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 10px;
+  border: 1px solid #d0d5dd;
+  padding: 0.65rem 0.8rem;
+}
+label { display: grid; gap: 0.25rem; font-weight: 600; }
+.inline { display: flex; gap: 0.5rem; align-items: center; }
+.primary { background: #175cd3; color: #fff; border: 0; margin-top: 0.75rem; font-weight: 700; }
+.list { list-style: none; padding: 0; margin: 0.5rem 0 0; display: grid; gap: 0.5rem; }
+.list li { background: #f8fafc; border-radius: 12px; padding: 0.75rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+.badge { border-radius: 999px; padding: 0.2rem 0.7rem; font-size: 0.8rem; text-transform: capitalize; }
+.badge.red { background: #fee4e2; color: #b42318; }
+.badge.orange { background: #fef0c7; color: #b54708; }
+.badge.green { background: #d1fadf; color: #027a48; }
+.result { background: #ecfdf3; color: #027a48; border-radius: 10px; padding: 0.6rem; }
+@media (min-width: 700px) {
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .mobile-form .form-grid label:first-child,
+  .mobile-form .form-grid label:last-child { grid-column: span 2; }
+}
